@@ -1,0 +1,12 @@
+# JetBrains
+/.idea/
+
+# App: Supe
+/apps/supe/vendor/
+/apps/supe/composer.lock
+/apps/supe/.env
+
+# App: Tracker
+/apps/tracker/vendor/
+/apps/tracker/composer.lock
+/apps/tracker/.env

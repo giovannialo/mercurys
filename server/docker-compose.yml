@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  app:
+    build: .
+    container_name: mercury
+    image: apache2-php81
+    restart: always
+    ports:
+      - '7000:80'
+      - '7001:443'
+    volumes:
+      - ../apps:/var/www/html
+    environment:
+      TZ: America/Maceio
+    networks:
+      - server_default
+
+networks:
+  server_default:
+    external: true

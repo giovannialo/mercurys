@@ -1,0 +1,42 @@
+version: '2'
+
+services:
+  mysqldb:
+    image: mysql:5.7
+    restart: always
+    ports:
+      - '7003:3306'
+    environment:
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'user'
+      MYSQL_ROOT_PASSWORD: 'root'
+      TZ: America/Maceio
+    volumes:
+      - mysqldb-data:/var/lib/mysql
+      - ./my-custom.cnf:/etc/mysql/conf.d/custom.cnf
+      - ./set-grant-permission-to-user.sql:/docker-entrypoint-initdb.d/set-grant-permission-to-user.sql
+      - ../apps/supe/database/dump.sql:/docker-entrypoint-initdb.d/supe-dump.sql
+      - ../apps/tracker/database/dump.sql:/docker-entrypoint-initdb.d/tracker-dump.sql
+    #    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
+    networks:
+      - server_default
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    ports:
+      - '7002:80'
+    environment:
+      - PMA_ARBITRARY=1
+    depends_on:
+      - mysqldb
+    networks:
+      - server_default
+
+volumes:
+  mysqldb-data:
+    driver: local
+
+networks:
+  server_default:
+    external: true
